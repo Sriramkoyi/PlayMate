@@ -265,4 +265,48 @@ public class GameServiceImpl implements GameService{
 	    gameRepository.save(game);
 		
 	}
+	@Override
+	public List<GameResponse> getGamesBySport(Long sportId){
+		return gameRepository.findBySportIdAndStatus(sportId, GameStatus.OPEN).stream().map(this::mapToResponse).toList();
+	}
+	@Override
+	public List<GameResponse> getNearByGames(Double latitude,Double longitude,Double distance){
+		return gameRepository.findByStatus(GameStatus.OPEN).stream().filter(game->{
+			double d=calculateDistance(latitude,longitude,game.getLatitude(),game.getLongitude());
+			return d<=distance;
+		}).map(game->{
+			GameResponse response=mapToResponse(game);
+			double d=calculateDistance(latitude,longitude,game.getLatitude(),game.getLongitude());
+			response.setDistance(Math.round(d*100.0)/100/.0);
+			return response;
+		})
+		.sorted((g1,g2)->Double.compare(g1.getDistance(),g2.getDistance()))
+		.toList();
+	}
+	private double calculateDistance(
+
+	        double lat1,
+	        double lon1,
+
+	        double lat2,
+	        double lon2) {
+
+	    final int EARTH_RADIUS = 6371;
+
+	    double dLat = Math.toRadians(lat2 - lat1);
+	    double dLon = Math.toRadians(lon2 - lon1);
+
+	    double a =
+	            Math.sin(dLat / 2) * Math.sin(dLat / 2)
+	                    + Math.cos(Math.toRadians(lat1))
+	                    * Math.cos(Math.toRadians(lat2))
+	                    * Math.sin(dLon / 2)
+	                    * Math.sin(dLon / 2);
+
+	    double c = 2 * Math.atan2(
+	            Math.sqrt(a),
+	            Math.sqrt(1 - a));
+
+	    return EARTH_RADIUS * c;
+	}
 }

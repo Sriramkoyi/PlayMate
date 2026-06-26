@@ -33,6 +33,8 @@ public class GameResponse {
     private Integer maxPlayers;
 
     private String status;
+    
+    private Double distance;
 
     public GameResponse() {
     }
@@ -147,6 +149,13 @@ public class GameResponse {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public Double getDistance() {
+	    return distance;
+	}
+
+	public void setDistance(Double distance) {
+	    this.distance = distance;
 	}
     
     

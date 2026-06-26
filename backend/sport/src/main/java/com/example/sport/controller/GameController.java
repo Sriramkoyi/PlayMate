@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,8 +39,11 @@ public class GameController {
 		return gameService.createGame(request);
 	}
 	@GetMapping
-	public List<GameResponse> getAllGames(){
-		return gameService.getAllGames();
+	public List<GameResponse> getAllGames(@RequestParam(required = false) Long sportId){
+		if(sportId==null) {
+			return gameService.getAllGames();
+		}
+		return gameService.getGamesBySport(sportId);
 	}
 	@PostMapping("/{gameId}/join")
 	public String joinGame(@PathVariable Long gameId) {
@@ -70,5 +74,9 @@ public class GameController {
 	public String deleteGame(@PathVariable Long gameId) {
 		gameService.cancelGame(gameId);
 		return "Game cancelled successfully";
+	}
+	@GetMapping("/nearby")
+	public List<GameResponse> getNearByGames(@RequestParam Double latitude,@RequestParam Double longitude,@RequestParam(defaultValue = "5") Double distance){
+		return gameService.getNearByGames(latitude, longitude, distance);
 	}
 }

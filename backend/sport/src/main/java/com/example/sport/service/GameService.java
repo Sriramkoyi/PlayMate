@@ -19,4 +19,6 @@ public interface GameService {
 	void leaveGame(Long gameId);
 	GameResponse updateGame(Long gameId,UpdateGameRequest request);
 	void cancelGame(Long gameId);
+	List<GameResponse> getGamesBySport(Long sportId);
+	List<GameResponse> getNearByGames(Double latitude,Double longitude,Double distance);
 }
