@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="content">
+        <h1 class="login-title">Login</h1>
+        <form class="login-form" [formGroup]="loginForm">
+            <div class="input-flex">
+                <label class="input-label">Email</label>
+                <input type="email" class="input-box" formControlName="email">
+
+            </div>
+            <div class="input-flex">
+                <label class="input-label">Password</label>
+                <input type="password" class="input-box" formControlName="password">
+
+            </div>
+            <button class="login-button" (click)="login()">Login</button>
+        </form>
+    </div>
+</div>
